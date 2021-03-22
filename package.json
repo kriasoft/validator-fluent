@@ -1,0 +1,66 @@
+{
+  "name": "validator-fluent",
+  "version": "0.1.0",
+  "description": "Validates and sanitizes user input using a strongly typed fluent API (TypeScript).",
+  "keywords": [
+    "validator",
+    "validatorjs",
+    "validator.js",
+    "validation",
+    "validate",
+    "sanitization",
+    "sanitize",
+    "sanitizer",
+    "sanitisation",
+    "sanitise",
+    "sanitiser",
+    "assert",
+    "typescript",
+    "fluent",
+    "chained"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Kriasoft",
+    "email": "hello@kriasoft.com",
+    "url": "https://kriasoft.com"
+  },
+  "contributors": [
+    "Konstantin Tarkus <hello@tarkus.me> (https://tarkus.me/)"
+  ],
+  "funding": {
+    "type": "patreon",
+    "url": "https://patreon.com/koistya"
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "lib/main.js",
+  "types": "lib/main.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "babel --env-name=production -x \".ts\" -d ./lib --delete-dir-on-start ./src && tsc"
+  },
+  "peerDependencies": {
+    "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/jest": "^26.0.21",
+    "@types/validator": "^13.1.3",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.22.0",
+    "eslint-config-prettier": "^8.1.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.3",
+    "validator": "^13.5.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

@@ -9,7 +9,7 @@ import isMobilePhone, {
   IsMobilePhoneOptions,
   MobilePhoneLocale,
 } from "validator/lib/isMobilePhone";
-import { Input, NotEmptyOptions } from "./types";
+import { NotEmptyOptions } from "./types";
 
 export class Validator<K, V> {
   readonly key;
@@ -194,8 +194,22 @@ export class Validator<K, V> {
     return this;
   }
 
-  valueOf() {
-    return this.value;
+  /**
+   * Checks if the value is valid using a custom validation function.
+   *
+   * @param check Validation function.
+   * @param message Validation error message.
+   */
+  is(check: (value: V, key: K) => boolean, message = defaultError): this {
+    if (!this.isEmpty && !check(this.value, this.key)) {
+      this.errors.push(message);
+    }
+
+    return this;
+  }
+
+  toNumber(): Validator<K, number> {
+    return new Validator(this.key, Number(this.value));
   }
 }
 

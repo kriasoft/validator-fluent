@@ -78,5 +78,12 @@ export declare class Validator<K, V> {
      * @param message Validation error message.
      */
     isMobilePhone(locale: MobilePhoneLocale[] | MobilePhoneLocale | "any", options: IsMobilePhoneOptions, message?: string): this;
-    valueOf(): V;
+    /**
+     * Checks if the value is valid using a custom validation function.
+     *
+     * @param check Validation function.
+     * @param message Validation error message.
+     */
+    is(check: (value: V, key: K) => boolean, message?: string): this;
+    toNumber(): Validator<K, number>;
 }

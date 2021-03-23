@@ -4,6 +4,7 @@
 
 import type { Validator } from "./validator";
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export type Input = { [key: string]: any };
 
 export type ValidationErrors<T extends Input> = {

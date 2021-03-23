@@ -47,5 +47,6 @@ module.exports = {
     "/.yarn",
     "/**/node_modules",
     "/coverage",
+    "/lib",
   ],
 };

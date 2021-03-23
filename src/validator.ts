@@ -9,7 +9,10 @@ import isMobilePhone, {
   IsMobilePhoneOptions,
   MobilePhoneLocale,
 } from "validator/lib/isMobilePhone";
-import { NotEmptyOptions } from "./types";
+
+type NotEmptyOptions = {
+  if: boolean;
+};
 
 export class Validator<K, V> {
   readonly key;
@@ -200,8 +203,11 @@ export class Validator<K, V> {
    * @param check Validation function.
    * @param message Validation error message.
    */
-  is(check: (value: V, key: K) => boolean, message = defaultError): this {
-    if (!this.isEmpty && !check(this.value, this.key)) {
+  is(
+    check: (value: NonNullable<V>, key: K) => boolean,
+    message = defaultError
+  ): this {
+    if (!this.isEmpty && !check(this.value as NonNullable<V>, this.key)) {
       this.errors.push(message);
     }
 

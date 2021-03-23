@@ -1,6 +1,6 @@
 {
   "name": "validator-fluent",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Validates and sanitizes user input using a strongly typed fluent API (TypeScript).",
   "keywords": [
     "validator",

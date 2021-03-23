@@ -2,9 +2,20 @@
  * @copyright 2021-present Kriasoft (https://git.io/JmNtC)
  */
 
-import type { Input, ValidationErrors, MapFn, ValidatorRef } from "./types";
 import { Validator } from "./validator";
-export { ValidationError } from "./error";
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+export type Base = { [key: string]: any };
+
+export type ValidationErrors<In> = {
+  [key in keyof In]?: string[];
+};
+
+export type MapFn<In extends Base, Out extends Base> = (
+  value: <K extends keyof In>(key: K) => Validator<K, In[K]>
+) => {
+  [P in keyof Out]: Validator<keyof In, Out[P]>;
+};
 
 /**
  * Validates user input.
@@ -12,49 +23,12 @@ export { ValidationError } from "./error";
  * @param input User input (object).
  * @param mapFn Matches individual input fields to validators.
  */
-export function validate<In extends Input, Out extends Input>(
+export function validate<In extends Base, Out extends Base>(
   input: In,
-  mapFn: MapFn<In, Out, Validator<keyof In, In[keyof In]>>
-): [Out, ValidationErrors<In> | null];
-
-/**
- * Validates user input.
- *
- * @param input User input (object).
- * @param validator Custom validator class.
- * @param mapFn Matches individual input fields to validators.
- */
-export function validate<
-  In extends Input,
-  Out extends Input,
-  Val extends Validator<keyof In, In[keyof In]>
->(
-  input: In,
-  validator: ValidatorRef<In, Val>,
-  mapFn: MapFn<In, Out, Val>
-): [Out, ValidationErrors<In> | null];
-
-export function validate<
-  In extends Input,
-  Out extends Input,
-  Val extends Validator<keyof In, In[keyof In]>
->(
-  input: In,
-  validator: ValidatorRef<In, Val> | MapFn<In, Out, Val>,
-  mapFn?: MapFn<In, Out, Val>
-): [Out, ValidationErrors<In> | null] {
-  // Fallback to using the default validator class if omitted
-  if (!(validator.prototype instanceof Validator)) {
-    mapFn = (validator as unknown) as MapFn<In, Out, Val>;
-    validator = (Validator as unknown) as ValidatorRef<In, Val>;
-  }
-
-  if (!mapFn) throw new TypeError();
-
+  mapFn: MapFn<In, Out>
+): [Out, ValidationErrors<In>] {
   // Maps input fields to field validators
-  const values = mapFn(
-    (key) => new (validator as ValidatorRef<In, Val>)(key, input[key])
-  );
+  const values = mapFn((key) => new Validator(key, input[key]));
 
   const output = {} as Out;
   const errors: ValidationErrors<In> = {};
@@ -64,7 +38,7 @@ export function validate<
     const input = values[key];
 
     if (input.value !== undefined) {
-      output[key as keyof Out] = (input.value as unknown) as Out[keyof Out];
+      output[key as keyof Out] = input.value as Out[keyof Out];
     }
 
     if (input.errors.length > 0) {
@@ -73,6 +47,20 @@ export function validate<
   });
 
   return [output, errors];
+}
+
+export class ValidationError extends Error {
+  readonly code = 422;
+  readonly errors: { [key: string]: string[] };
+
+  constructor(
+    errors: { [key: string]: string[] },
+    message = "Validation failed."
+  ) {
+    super(message);
+    Object.setPrototypeOf(this, new.target.prototype);
+    this.errors = errors;
+  }
 }
 
 export { Validator };

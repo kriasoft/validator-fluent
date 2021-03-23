@@ -68,6 +68,5 @@
     "skipLibCheck": true,                           /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true,       /* Disallow inconsistently-cased references to the same file. */
     "emitDeclarationOnly": true                     /* Only emit .d.ts files; do not emit .js files. */
-  },
-  "exclude": ["**/*.test.ts"]
+  }
 }

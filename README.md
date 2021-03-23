@@ -60,38 +60,6 @@ For the full list of available validation rules please refer to:
 
 https://github.com/validatorjs/validator.js#validators
 
-## Advanced Usage
-
-You can extend the built-in validator class with any additional validation rules (methods).
-
-```ts
-import { validate, Validator, ValidationError } from "validator-fluent";
-
-class CoolValidator<K, V> extends Validator<K, V> {
-  constructor(key: K, value: V) {
-    super(key, value);
-  }
-
-  isLegit(): this {
-    if (!this.isEmpty && this.value !== "legit") {
-      this.errors.push("Not legit.");
-    }
-
-    return this;
-  }
-}
-
-const input = { name: "???" };
-
-const [data, errors] = validate(input, CoolValidator, (value) => ({
-  name: value("name").notEmpty().isLegit(),
-}));
-
-if (Object.key(errors).length > 0) {
-  throw new ValidationError(errors);
-}
-```
-
 ## Related Projects
 
 - [GraphQL API Starter Kit](https://github.com/kriasoft/graphql-starter) — project template, pre-configured with TypeScript, GraphQL.js, React, and Relay.

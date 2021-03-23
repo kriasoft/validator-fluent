@@ -5,7 +5,9 @@ import { IsLengthOptions } from "validator/lib/isLength";
 import { IsEmailOptions } from "validator/lib/isEmail";
 import { IsURLOptions } from "validator/lib/isURL";
 import { IsMobilePhoneOptions, MobilePhoneLocale } from "validator/lib/isMobilePhone";
-import { NotEmptyOptions } from "./types";
+declare type NotEmptyOptions = {
+    if: boolean;
+};
 export declare class Validator<K, V> {
     readonly key: K;
     readonly value: V;
@@ -84,6 +86,7 @@ export declare class Validator<K, V> {
      * @param check Validation function.
      * @param message Validation error message.
      */
-    is(check: (value: V, key: K) => boolean, message?: string): this;
+    is(check: (value: NonNullable<V>, key: K) => boolean, message?: string): this;
     toNumber(): Validator<K, number>;
 }
+export {};

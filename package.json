@@ -1,6 +1,6 @@
 {
   "name": "validator-fluent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Validates and sanitizes user input using a strongly typed fluent API (TypeScript).",
   "keywords": [
     "validator",
@@ -35,8 +35,8 @@
   "files": [
     "lib"
   ],
-  "main": "lib/main.js",
-  "types": "lib/main.d.ts",
+  "main": "lib/validate.js",
+  "types": "lib/validate.d.ts",
   "scripts": {
     "test": "jest",
     "build": "babel --env-name=production -x \".ts\" -d ./lib --delete-dir-on-start ./src && tsc"

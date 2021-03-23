@@ -9,27 +9,26 @@ import isMobilePhone, {
   IsMobilePhoneOptions,
   MobilePhoneLocale,
 } from "validator/lib/isMobilePhone";
-import { NotEmptyOptions } from "./types";
+import { Input, NotEmptyOptions } from "./types";
 
-export class Validator<T> {
-  private readonly value;
-  private readonly isEmpty;
-  private readonly addError;
+export class Validator<K, V> {
+  readonly key;
+  readonly value;
+  readonly isEmpty;
+  readonly errors: string[] = [];
 
   /**
    * Creates a new instance of the `Validator<T>`.
    *
    * @param value Input value.
-   * @param addError Validation error callback.
    */
-  constructor(value: T, addError: (message: string) => void) {
+  constructor(key: K, value: V) {
+    this.key = key;
     this.value = value;
-    this.addError = addError;
-
     this.isEmpty =
-      value == null ||
-      value === undefined ||
-      (typeof value === "string" && value === "");
+      this.value == null ||
+      this.value === undefined ||
+      (typeof this.value === "string" && this.value === "");
   }
 
   /**
@@ -37,7 +36,7 @@ export class Validator<T> {
    *
    * @param message Validation error message.
    */
-  notEmpty(message?: string): Validator<T>;
+  notEmpty(message?: string): this;
 
   /**
    * Checks if the value is not `null`, empty, or `undefined`.
@@ -45,16 +44,16 @@ export class Validator<T> {
    * @param options Validation options.
    * @param message Validation error message.
    */
-  notEmpty(options: NotEmptyOptions, message?: string): Validator<T>;
+  notEmpty(options: NotEmptyOptions, message?: string): this;
 
-  notEmpty(options?: NotEmptyOptions | string, message?: string): Validator<T> {
+  notEmpty(options?: NotEmptyOptions | string, message?: string): this {
     if (typeof options === "string") {
       message = options;
       options = undefined;
     }
 
     if (options?.if !== false && this.isEmpty) {
-      this.addError(message || "Cannot be empty.");
+      this.errors.push(message || "Cannot be empty.");
     }
 
     return this;
@@ -66,7 +65,7 @@ export class Validator<T> {
    * @param options Validation options.
    * @param message Validation error message.
    */
-  isLength(options: IsLengthOptions, message?: string): Validator<T> {
+  isLength(options: IsLengthOptions, message?: string): this {
     if (!message) {
       if (options?.min && options?.max) {
         message = `Must be between ${options.min} and ${options.max} characters long.`;
@@ -82,7 +81,7 @@ export class Validator<T> {
     if (!this.isEmpty) {
       if (typeof this.value !== "string") throw new Error(notStringError);
       if (!isLength(this.value, options)) {
-        this.addError(message);
+        this.errors.push(message);
       }
     }
 
@@ -94,7 +93,7 @@ export class Validator<T> {
    *
    * @param message Validation error message.
    */
-  isEmail(message?: string): Validator<T>;
+  isEmail(message?: string): this;
 
   /**
    * Checks if the value is a valid email address.
@@ -102,9 +101,9 @@ export class Validator<T> {
    * @param options Email validation options.
    * @param message Validation error message.
    */
-  isEmail(options: IsEmailOptions, message?: string): Validator<T>;
+  isEmail(options: IsEmailOptions, message?: string): this;
 
-  isEmail(options?: IsEmailOptions | string, message?: string): Validator<T> {
+  isEmail(options?: IsEmailOptions | string, message?: string): this {
     if (typeof options === "string") {
       message = options;
       options = undefined;
@@ -113,7 +112,7 @@ export class Validator<T> {
     if (!this.isEmpty) {
       if (typeof this.value !== "string") throw new Error(notStringError);
       if (!isEmail(this.value, options)) {
-        this.addError(message || "Email address is invalid.");
+        this.errors.push(message || "Email address is invalid.");
       }
     }
 
@@ -125,7 +124,7 @@ export class Validator<T> {
    *
    * @param message Validation error message.
    */
-  isURL(message?: string): Validator<T>;
+  isURL(message?: string): this;
 
   /**
    * Checks if the value is a valid URL address.
@@ -133,9 +132,9 @@ export class Validator<T> {
    * @param options URL validation options.
    * @param message Validation error message.
    */
-  isURL(options: IsURLOptions, message?: string): Validator<T>;
+  isURL(options: IsURLOptions, message?: string): this;
 
-  isURL(options?: IsURLOptions | string, message?: string): Validator<T> {
+  isURL(options?: IsURLOptions | string, message?: string): this {
     if (typeof options === "string") {
       message = options;
       options = undefined;
@@ -144,7 +143,7 @@ export class Validator<T> {
     if (!this.isEmpty) {
       if (typeof this.value !== "string") throw new Error(notStringError);
       if (!isURL(this.value, options)) {
-        this.addError(message || "URL is invalid.");
+        this.errors.push(message || "URL is invalid.");
       }
     }
 
@@ -160,7 +159,7 @@ export class Validator<T> {
   isMobilePhone(
     locale: MobilePhoneLocale[] | MobilePhoneLocale | "any",
     message?: string
-  ): Validator<T>;
+  ): this;
 
   /**
    * Checks if the value is a valid mobile phone.
@@ -173,13 +172,13 @@ export class Validator<T> {
     locale: MobilePhoneLocale[] | MobilePhoneLocale | "any",
     options: IsMobilePhoneOptions,
     message?: string
-  ): Validator<T>;
+  ): this;
 
   isMobilePhone(
     locale: MobilePhoneLocale[] | MobilePhoneLocale | "any" = "any",
     options?: IsMobilePhoneOptions | string,
     message?: string
-  ): Validator<T> {
+  ): this {
     if (typeof options === "string") {
       message = options;
       options = undefined;
@@ -188,7 +187,7 @@ export class Validator<T> {
     if (!this.isEmpty) {
       if (typeof this.value !== "string") throw new Error(notStringError);
       if (!isMobilePhone(this.value, locale, options)) {
-        this.addError(message || "Phone number is invalid.");
+        this.errors.push(message || "Phone number is invalid.");
       }
     }
 

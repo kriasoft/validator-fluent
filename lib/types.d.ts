@@ -5,13 +5,13 @@ import type { Validator } from "./validator";
 export declare type Input = {
     [key: string]: any;
 };
-export declare type ValidationRules<In extends Input> = {
-    [key in keyof In]: Validator<In[key]>;
-};
 export declare type ValidationErrors<T extends Input> = {
     [key in keyof T]?: string[];
 };
-export declare type ValueFn<In extends Input, Key extends keyof In> = (key: Key) => Validator<In[Key]>;
+export declare type MapFn<In, Out, Val extends Validator<keyof In, In[keyof In]>> = (value: (key: keyof In) => Val) => {
+    [key in keyof Out]: Val;
+};
 export declare type NotEmptyOptions = {
     if: boolean;
 };
+export declare type ValidatorRef<In, V> = new (key: keyof In, value: In[keyof In]) => V;

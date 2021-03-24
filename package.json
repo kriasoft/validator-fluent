@@ -1,6 +1,6 @@
 {
   "name": "validator-fluent",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Validates and sanitizes user input using a strongly typed fluent API (TypeScript).",
   "keywords": [
     "validator",
@@ -49,6 +49,7 @@
   "devDependencies": {
     "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.10",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/preset-env": "^7.13.10",
     "@babel/preset-typescript": "^7.13.0",
     "@types/jest": "^26.0.21",

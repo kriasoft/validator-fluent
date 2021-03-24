@@ -11,6 +11,8 @@ module.exports = function config(api) {
   return {
     presets: [["@babel/preset-env", { targets: { node: "10" } }]],
 
+    plugins: [["@babel/plugin-proposal-class-properties", { loose: true }]],
+
     ignore:
       api.env() === "test"
         ? []
